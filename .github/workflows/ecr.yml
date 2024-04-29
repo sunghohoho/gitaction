@@ -12,7 +12,6 @@ env:
   ECS_TASK_DEFINITION: fc-taskdef    # taskdef 이름
   ECS_CONTAINER_NAME: gitaction
   AWS_OIDC_AUTH : arn:aws:iam::866477832211:role/gitaction-role
-  SLACK_URL : https://hooks.slack.com/services/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
 
 permissions:
   id-token: write

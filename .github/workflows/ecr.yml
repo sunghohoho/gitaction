@@ -11,6 +11,7 @@ env:
   ECS_CLUSTER: gitaction            # 클러스터 이름
   ECS_TASK_DEFINITION: fc-taskdef    # taskdef 이름
   ECS_CONTAINER_NAME: gitaction
+  AWS_OIDC_AUTH : arn:aws:iam::866477832211:role/gitaction-role
 
 permissions:
   id-token: write
@@ -29,7 +30,7 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        role-to-assume: arn:aws:iam::866477832211:role/gitaction-role #OIDC 자격증명
+        role-to-assume: ${{ env.AWS_OIDC_AUTH }} #OIDC 자격증명
         role-session-name: GitHubActions
         aws-region: ${{ env.AWS_REGION }}
 
@@ -49,7 +50,6 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-        # echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_NAME:$IMAGE_TAG" >> $GITHUB_OUTPUT
         
     - name: Download Task Def Template
       run: |
@@ -69,6 +69,11 @@ jobs:
         task-definition: task-definition.json
         container-name: ${{ env.ECS_CONTAINER_NAME }}
         image: ${{ steps.build-image.outputs.image }}
+        
+    - name: cat file
+      id: cat-file
+      run :  |
+        cat task-definition.json
 
     - name: Deploy Amazon ECS task def
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1

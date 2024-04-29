@@ -8,6 +8,9 @@ on:
 env:
   AWS_REGION: ap-northeast-2        # set this to your preferred AWS region, e.g. us-west-1
   ECR_REPOSITORY: gitaction            # set this to your Amazon ECR repository name
+  ECS_CLUSTER: gitaction            # 클러스터 이름
+  ECS_TASK_DEFINITION: fc-taskdef    # taskdef 이름
+  ECS_CONTAINER_NAME: gitaction
 
 permissions:
   id-token: write
@@ -26,7 +29,7 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        role-to-assume: arn:aws:iam::866477832211:role/gitaction-role 
+        role-to-assume: arn:aws:iam::866477832211:role/gitaction-role #OIDC 자격증명
         role-session-name: GitHubActions
         aws-region: ${{ env.AWS_REGION }}
 
@@ -46,3 +49,29 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+        
+    - name: Download Task Def Template
+      run: |
+        aws ecs describe-task-definition \
+          --task-definition ${{ env.ECS_TASK_DEFINITION}} \
+          --query taskDefinition \
+          > task-definition.json
+
+    - name: echo my sts
+      run : |
+        aws sts get-caller-identity
+
+    - name: Fill in the new image ID in the ECS Task Def
+      id: task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: task-definition.json
+        container-name: ${{ env.ECS_CONTAINER_NAME }}
+        image: ${{ step.build-image.outputs.image }}
+
+    - name: Deploy Amazon ECS task def
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def.outputs.task-definition }}
+        cluster: ${{ env.ECS_CLUSTER }}
+        

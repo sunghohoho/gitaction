@@ -89,7 +89,7 @@ jobs:
         author_name: Github Action # default: 8398a7@action-slack
         fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
       env:
-        SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }} # required
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
       if: always() # Pick up events even if the job fails or is canceled.
         
         

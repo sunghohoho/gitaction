@@ -12,6 +12,7 @@ env:
   ECS_TASK_DEFINITION: fc-taskdef    # taskdef 이름
   ECS_CONTAINER_NAME: gitaction
   AWS_OIDC_AUTH : arn:aws:iam::866477832211:role/gitaction-role
+  SLACK_URL : https://hooks.slack.com/services/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
 
 permissions:
   id-token: write
@@ -80,4 +81,15 @@ jobs:
       with:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
         cluster: ${{ env.ECS_CLUSTER }}
+        
+    - name: action-slack
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        author_name: Github Action # default: 8398a7@action-slack
+        fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+      env:
+        SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }} # required
+      if: always() # Pick up events even if the job fails or is canceled.
+        
         

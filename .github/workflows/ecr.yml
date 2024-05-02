@@ -107,4 +107,13 @@ jobs:
         cat build.txt
         aws s3 cp build.txt s3://dudududu/build.txt
      
-        
+    - name: 특정 파일 업로드
+      uses: actions/upload-artifact@v2
+      with:
+        name: my-artifact
+        path: artifact.txt
+
+    - name: upload s3
+      run: |
+        cat artifact.txt
+        aws s3 cp build.txt s3://dudududu/artifact.txt

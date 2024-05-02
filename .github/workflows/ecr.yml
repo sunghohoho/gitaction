@@ -111,14 +111,16 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: my-artifact
-        path: ~/artifact.txt
+        path: my_file.txt
 
     - name: Download a single artifact
       uses: actions/download-artifact@v4
       with:
-        name: artifact.txt
+        name: my-artifact
         path: ~/
 
     - name: uploads s3
       run: |
+        cat my_file.txt
+        cat my-artifact
         aws s3 cp ~/artifact.txt s3://dudududu/artifact.txt

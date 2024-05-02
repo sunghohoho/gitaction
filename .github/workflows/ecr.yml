@@ -90,5 +90,20 @@ jobs:
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
       if: always() # Pick up events even if the job fails or is canceled.
-        
+
+    - name: write build info
+      run: |
+        cat <<EOF build.txt
+        Build ID: ${{ github.run_id }} \
+        Repo : ${{ github.action.repository }} \
+        Actor : ${{ github.actor }} \
+        API URL : ${{ github.api.url }} \
+        SHA : ${{ github_sha }} \
+        Trigger : ${{ github.triggering_actor }} \ 
+        EOF
+
+    - name: upload s3
+      run: |
+        aws s3 build.txt s3://dudududu/build.txt
+     
         

@@ -98,7 +98,7 @@ jobs:
         Repo : ${{ github.action.repository }} \
         Actor : ${{ github.actor }} \
         API URL : ${{ github.api.url }} \
-        SHA : ${{ github_sha }} \
+        SHA : ${{ github.sha }} \
         Trigger : ${{ github.triggering_actor }} \ 
         EOF
 

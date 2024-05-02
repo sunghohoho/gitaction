@@ -93,7 +93,7 @@ jobs:
 
     - name: write build info
       run: |
-        cat > build.txt <<EOF build.txt
+        cat > build.txt <<EOF 
           Build ID: ${{ github.run_id }} \
           Repo : ${{ github.action.repository }} \
           Actor : ${{ github.actor }} \

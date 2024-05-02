@@ -94,12 +94,12 @@ jobs:
     - name: write build info
       run: |
         cat > build.txt <<EOF 
-          Build ID: ${{ github.run_id }} \
-          Repo : ${{ github.action.repository }} \
-          Actor : ${{ github.actor }} \
-          API URL : ${{ github.api.url }} \
-          SHA : ${{ github.sha }} \
-          Trigger : ${{ github.triggering_actor }} \ 
+          Build ID: ${{ github.run_id }} \n
+          Repo : ${{ github.action.repository }} \n
+          Actor : ${{ github.actor }} \n
+          API URL : ${{ github.api.url }} \n
+          SHA : ${{ github.sha }} \n
+          Trigger : ${{ github.triggering_actor }} \n
           EOF
 
     - name: upload s3

@@ -91,27 +91,33 @@ jobs:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
       if: always() # Pick up events even if the job fails or is canceled.
 
-    - name: write build info
-      run: |
-        cat > build.txt <<EOF 
-          Build ID: ${{ github.run_id }}\n
-          Repo : ${{ github.action.repository }}\n
-          Actor : ${{ github.actor }}\n
-          API URL : ${{ github.api.url }}\n
-          SHA : ${{ github.sha }}\n
-          Trigger : ${{ github.triggering_actor }}\n
-          EOF
+    # - name: write build info
+    #   run: |
+    #     cat > build.txt <<EOF 
+    #       Build ID: ${{ github.run_id }}\n
+    #       Repo : ${{ github.action.repository }}\n
+    #       Actor : ${{ github.actor }}\n
+    #       API URL : ${{ github.api.url }}\n
+    #       SHA : ${{ github.sha }}\n
+    #       Trigger : ${{ github.triggering_actor }}\n
+    #       EOF
 
-    - name: upload s3
-      run: |
-        cat build.txt
-        aws s3 cp build.txt s3://dudududu/build.txt
+    # - name: upload s3
+    #   run: |
+    #     cat build.txt
+    #     aws s3 cp build.txt s3://dudududu/build.txt
      
     - name: get artifact
       uses: actions/upload-artifact@v2
       with:
         name: my-artifact
         path: ~/artifact.txt
+
+    - name: Download a single artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: artifact.txt
+        path: ~/
 
     - name: uploads s3
       run: |

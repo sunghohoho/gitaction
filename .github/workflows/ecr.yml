@@ -104,6 +104,6 @@ jobs:
 
     - name: upload s3
       run: |
-        aws s3 build.txt s3://dudududu/build.txt
+        aws s3 cp build.txt s3://dudududu/build.txt
      
         

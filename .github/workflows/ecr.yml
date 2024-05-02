@@ -94,16 +94,17 @@ jobs:
     - name: write build info
       run: |
         cat > build.txt <<EOF build.txt
-        Build ID: ${{ github.run_id }} \
-        Repo : ${{ github.action.repository }} \
-        Actor : ${{ github.actor }} \
-        API URL : ${{ github.api.url }} \
-        SHA : ${{ github.sha }} \
-        Trigger : ${{ github.triggering_actor }} \ 
-        EOF
+          Build ID: ${{ github.run_id }} \
+          Repo : ${{ github.action.repository }} \
+          Actor : ${{ github.actor }} \
+          API URL : ${{ github.api.url }} \
+          SHA : ${{ github.sha }} \
+          Trigger : ${{ github.triggering_actor }} \ 
+          EOF
 
     - name: upload s3
       run: |
+        cat build.txt
         aws s3 cp build.txt s3://dudududu/build.txt
      
         

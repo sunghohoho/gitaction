@@ -14,6 +14,7 @@ env:
   AWS_OIDC_AUTH : arn:aws:iam::866477832211:role/gitaction-role
 
 permissions:
+  packages: write
   id-token: write
   contents: read
 

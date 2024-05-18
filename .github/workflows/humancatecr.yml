@@ -5,6 +5,7 @@ on: workflow_dispatch
 
 env:
   REGISTRY: ghcr.io    # github package 사용
+  NAMESPACE: ${{ vars.NAMESPACE }}
   AWS_REGION: "ap-northeast-2"                 # set this to your preferred AWS region, e.g. us-west-1
   ECR_REPOSITORY: "humancat"           # set this to your Amazon ECR repository name
   AWS_ACCESS: "arn:aws:iam::866477832211:role/gitaction-role"
